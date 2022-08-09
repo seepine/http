@@ -5,7 +5,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okio.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class ProgressMultipartRequestBody extends RequestBody {
   }
 
   @Override
-  public void writeTo(@NotNull BufferedSink sink) throws IOException {
+  public void writeTo(BufferedSink sink) throws IOException {
     if (bufferedSink == null) {
       bufferedSink = Okio.buffer(new ProgressBufferSink(sink));
     }
@@ -60,7 +59,7 @@ public class ProgressMultipartRequestBody extends RequestBody {
     }
 
     @Override
-    public void write(@NotNull Buffer source, long byteCount) throws IOException {
+    public void write(Buffer source, long byteCount) throws IOException {
       super.write(source, byteCount);
       bytesWritten += byteCount;
       progressListener.onProgress(bytesWritten, contentLength);

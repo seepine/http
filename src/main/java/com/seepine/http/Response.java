@@ -3,8 +3,6 @@ package com.seepine.http;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +47,7 @@ public class Response {
    * @param name name eg:location
    * @return headerValue
    */
-  @Nullable
-  public String header(@NotNull("header's name cant not be null") String name) {
+  public String header(String name) {
     return response.header(name.trim());
   }
 
@@ -78,14 +75,12 @@ public class Response {
     return body;
   }
 
-  @Nullable
   public String bodyStr() {
     if (bodyStr == null) {
       try {
         bodyStr = body.string();
       } catch (NullPointerException ignored) {
       } catch (IOException e) {
-        e.printStackTrace();
         throw new IllegalArgumentException(e.getMessage());
       }
     }

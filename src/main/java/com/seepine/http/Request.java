@@ -4,7 +4,6 @@ import com.seepine.http.entity.DownloadProgressListener;
 import com.seepine.http.entity.ProgressListener;
 import com.seepine.http.entity.ProgressMultipartRequestBody;
 import okhttp3.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +100,7 @@ public class Request {
 
   public Request body(String jsonBody) {
     contentType = ContentType.JSON;
-    requestBody = RequestBody.create(jsonBody, MediaType.parse(contentType.toString(charset)));
+    requestBody = RequestBody.create(MediaType.parse(contentType.toString(charset)), jsonBody);
     return this;
   }
 
@@ -113,7 +112,7 @@ public class Request {
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
+                RequestBody.create(MediaType.parse(ContentType.MULTIPART.getValue()), file))
             .build();
     return this;
   }
@@ -127,7 +126,7 @@ public class Request {
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
+                RequestBody.create(MediaType.parse(ContentType.MULTIPART.getValue()), file))
             .build();
     return this;
   }
@@ -216,13 +215,13 @@ public class Request {
         .enqueue(
             new Callback() {
               @Override
-              public void onFailure(@NotNull Call call, @NotNull IOException e) {
+              public void onFailure(Call call, IOException e) {
                 res[0] = new Response(e);
                 countDownLatch.countDown();
               }
 
               @Override
-              public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) {
+              public void onResponse(Call call, okhttp3.Response response) {
                 try {
                   InputStream is = Objects.requireNonNull(response.body()).byteStream();
                   byte[] buf = new byte[8192];
