@@ -25,11 +25,7 @@ public class Request {
   private Method method = Method.GET;
   private ContentType contentType = ContentType.FORM_URLENCODED;
   private final Charset charset = StandardCharsets.UTF_8;
-  private final Headers.Builder headers =
-      new Headers.Builder()
-          .add(
-              "user-agent",
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.55");
+  private final Headers.Builder headers = new Headers.Builder();
   /** 存储url数据 */
   private final Map<String, Object> params = new HashMap<>();
   /** 存储表单数据 */
@@ -98,9 +94,19 @@ public class Request {
     return this;
   }
 
+  public Request addHeader(Map<String, String> headers) {
+    headers.forEach(this.headers::add);
+    return this;
+  }
+
+  public Request removeHeader(String name) {
+    headers.removeAll(name);
+    return this;
+  }
+
   public Request body(String jsonBody) {
     contentType = ContentType.JSON;
-    requestBody = RequestBody.create(MediaType.parse(contentType.toString(charset)), jsonBody);
+    requestBody = RequestBody.create(jsonBody, MediaType.parse(contentType.toString(charset)));
     return this;
   }
 
@@ -112,7 +118,7 @@ public class Request {
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(MediaType.parse(ContentType.MULTIPART.getValue()), file))
+                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
             .build();
     return this;
   }
@@ -126,7 +132,7 @@ public class Request {
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(MediaType.parse(ContentType.MULTIPART.getValue()), file))
+                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
             .build();
     return this;
   }
