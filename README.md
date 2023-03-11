@@ -2,16 +2,30 @@
 
 easy http for java
 
+## 一、安装
+
+#### LatestVersion
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.seepine/http.svg)](https://search.maven.org/search?q=g:com.seepine%20a:http)
+
+#### Maven
+
 ```xml
 
 <dependency>
   <groupId>com.seepine</groupId>
   <artifactId>http</artifactId>
-  <version>0.1.0</version>
+  <version>${latestVersion}</version>
 </dependency>
 ```
 
-## 一、使用方法
+#### Gradle
+
+```gradle
+implementation("com.seepine:http:${lastVersion}")
+```
+
+## 二、使用
 
 ### 1.Get
 
@@ -145,7 +159,7 @@ class CustomTest {
 }
 ```
 
-## 二、修改OkHttpClient
+## 三、修改OkHttpClient
 
 ### 1.修改默认okHttpClient配置
 
@@ -154,7 +168,7 @@ import com.seepine.http.HttpClientPool;
 
 class Test {
   public static void main(String[] args) {
-    HttpClientPool.put(HttpClientPool.DEFAULT_CLIENT_KEY, new OkHttpClient.Builder().followRedirects(false).build());
+    HttpClientPool.put("your client name", new OkHttpClient.Builder().followRedirects(false).build());
   }
 }
 ```
