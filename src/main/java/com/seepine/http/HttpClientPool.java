@@ -46,11 +46,15 @@ public class HttpClientPool {
   }
 
   public static void put(String key) {
-    getInstance().map.put(key, defaultBuilt().build());
+    put(key, defaultBuilt().build());
   }
 
   public static void put(String key, OkHttpClient okHttpClient) {
     getInstance().map.put(key, okHttpClient);
+  }
+
+  public static void putIfAbsent(String key, OkHttpClient okHttpClient) {
+    getInstance().map.putIfAbsent(key, okHttpClient);
   }
 
   public static OkHttpClient get() {
