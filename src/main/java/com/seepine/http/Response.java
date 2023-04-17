@@ -1,5 +1,6 @@
 package com.seepine.http;
 
+import com.seepine.http.exception.HttpException;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
@@ -10,12 +11,11 @@ import java.io.InputStream;
  * @author seepine
  */
 public class Response {
-  private okhttp3.Response response;
-  private ResponseBody body;
-  private boolean isOk = false;
-  private boolean isRedirect = false;
-  private int status = -1;
-
+  private final okhttp3.Response response;
+  private final ResponseBody body;
+  private final boolean isOk;
+  private final boolean isRedirect;
+  private final int status;
   private String bodyStr;
 
   public Response(okhttp3.Response response) {
@@ -24,15 +24,6 @@ public class Response {
     isOk = response.isSuccessful();
     isRedirect = response.isRedirect();
     status = response.code();
-  }
-
-  public Response(Exception e) {
-    e.printStackTrace();
-  }
-
-  public Response(okhttp3.Response response, Exception e) {
-    this.response = response;
-    e.printStackTrace();
   }
 
   public Headers headers() {
@@ -81,7 +72,7 @@ public class Response {
         bodyStr = body.string();
       } catch (NullPointerException ignored) {
       } catch (IOException e) {
-        throw new IllegalArgumentException(e.getMessage());
+        throw new HttpException(e);
       }
     }
     return bodyStr;
@@ -91,8 +82,7 @@ public class Response {
     try {
       return body.bytes();
     } catch (IOException e) {
-      e.printStackTrace();
-      throw new IllegalArgumentException(e.getMessage());
+      throw new HttpException(e);
     }
   }
 

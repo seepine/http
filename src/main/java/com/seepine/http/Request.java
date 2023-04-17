@@ -3,6 +3,7 @@ package com.seepine.http;
 import com.seepine.http.entity.DownloadProgressListener;
 import com.seepine.http.entity.ProgressListener;
 import com.seepine.http.entity.ProgressMultipartRequestBody;
+import com.seepine.http.exception.HttpException;
 import okhttp3.*;
 
 import java.io.File;
@@ -198,12 +199,12 @@ public class Request {
     return new FormBody.Builder().build();
   }
 
-  public Response execute() {
+  public Response execute() throws HttpException {
     try {
       return new Response(
           HttpClientPool.get(okHttpClientName).newCall(buildOkHttpRequest()).execute());
     } catch (IOException e) {
-      return new Response(e);
+      throw new HttpException(e);
     }
   }
 
@@ -213,7 +214,7 @@ public class Request {
    * @param progressListener 进度实现方法
    * @return 请求结果
    */
-  public Response execute(DownloadProgressListener progressListener) {
+  public Response execute(DownloadProgressListener progressListener) throws HttpException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     final Response[] res = new Response[1];
     HttpClientPool.get(okHttpClientName)
@@ -222,8 +223,8 @@ public class Request {
             new Callback() {
               @Override
               public void onFailure(Call call, IOException e) {
-                res[0] = new Response(e);
                 countDownLatch.countDown();
+                throw new HttpException(e);
               }
 
               @Override
@@ -241,7 +242,7 @@ public class Request {
                   is.close();
                   res[0] = new Response(response);
                 } catch (Exception e) {
-                  res[0] = new Response(response, e);
+                  throw new HttpException(e);
                 } finally {
                   countDownLatch.countDown();
                 }
@@ -251,7 +252,7 @@ public class Request {
       countDownLatch.await();
       return res[0];
     } catch (Exception e) {
-      return new Response(e);
+      throw new HttpException(e);
     }
   }
 
