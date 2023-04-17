@@ -42,7 +42,7 @@ public class HttpClientPool {
         .writeTimeout(60, TimeUnit.SECONDS)
         .sslSocketFactory(
             SslSkip.createSSLSocketFactory(trustManagers), (X509TrustManager) trustManagers[0])
-        .retryOnConnectionFailure(true);
+        .retryOnConnectionFailure(false);
   }
 
   public static void put(String key) {
