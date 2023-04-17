@@ -3,6 +3,8 @@ package com.seepine.http;
 import okhttp3.MediaType;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author seepine
  */
@@ -60,6 +62,26 @@ public enum ContentType {
    */
   public String toString(Charset charset) {
     return parse(this, charset);
+  }
+
+  /**
+   * 输出toMediaType
+   *
+   * @return MediaType
+   */
+  public MediaType toMediaType() {
+    return MediaType.Companion.parse(
+        ContentType.parse(ContentType.FORM_URLENCODED, StandardCharsets.UTF_8));
+  }
+
+  /**
+   * 输出toMediaType
+   *
+   * @param charset charset
+   * @return MediaType
+   */
+  public MediaType toMediaType(Charset charset) {
+    return MediaType.Companion.parse(ContentType.parse(ContentType.FORM_URLENCODED, charset));
   }
 
   /**
