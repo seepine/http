@@ -24,8 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Request {
   private final String url;
   private Method method = Method.GET;
-  private ContentType contentType = ContentType.FORM_URLENCODED;
-  private final Charset charset = StandardCharsets.UTF_8;
+  private Charset charset = StandardCharsets.UTF_8;
   private final Headers.Builder headers = new Headers.Builder();
   /** 存储url数据 */
   private final Map<String, Object> params = new HashMap<>();
@@ -105,36 +104,46 @@ public class Request {
     return this;
   }
 
+  public Request charset(Charset charset) {
+    this.charset = charset;
+    return this;
+  }
+
   public Request body(String jsonBody) {
-    contentType = ContentType.JSON;
-    requestBody = RequestBody.create(jsonBody, MediaType.parse(contentType.toString(charset)));
+    requestBody = RequestBody.create(jsonBody, ContentType.JSON.toMediaType(charset));
+    return this;
+  }
+
+  public Request body(byte[] bytes) {
+    return body(bytes, MediaType.parse(ContentType.OCTET_STREAM.getValue()));
+  }
+
+  public Request body(byte[] bytes, MediaType mediaType) {
+    requestBody = RequestBody.create(bytes, mediaType);
+    return this;
+  }
+
+  public Request body(String content, MediaType mediaType) {
+    requestBody = RequestBody.create(content, mediaType);
     return this;
   }
 
   public Request body(File file) {
-    contentType = ContentType.MULTIPART;
-    requestBody =
-        new MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "file",
-                file.getName(),
-                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
-            .build();
-    return this;
+    return body(file, null);
   }
 
   public Request body(File file, ProgressListener progressListener) {
-    contentType = ContentType.MULTIPART;
-    requestBody =
+    ProgressMultipartRequestBody.Builder builder =
         new ProgressMultipartRequestBody.Builder()
-            .addProgressListener(progressListener)
             .setType(MultipartBody.FORM)
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())))
-            .build();
+                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())));
+    if (progressListener != null) {
+      builder.addProgressListener(progressListener);
+    }
+    requestBody = builder.build();
     return this;
   }
 
