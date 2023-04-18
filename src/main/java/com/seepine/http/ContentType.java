@@ -70,8 +70,7 @@ public enum ContentType {
    * @return MediaType
    */
   public MediaType toMediaType() {
-    return MediaType.Companion.parse(
-        ContentType.parse(ContentType.FORM_URLENCODED, StandardCharsets.UTF_8));
+    return MediaType.Companion.parse(ContentType.parse(value, StandardCharsets.UTF_8));
   }
 
   /**
@@ -81,7 +80,7 @@ public enum ContentType {
    * @return MediaType
    */
   public MediaType toMediaType(Charset charset) {
-    return MediaType.Companion.parse(ContentType.parse(ContentType.FORM_URLENCODED, charset));
+    return MediaType.Companion.parse(ContentType.parse(value, charset));
   }
 
   /**
