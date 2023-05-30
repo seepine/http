@@ -110,7 +110,7 @@ public class Request {
   }
 
   public Request body(String jsonBody) {
-    requestBody = RequestBody.create(jsonBody, ContentType.JSON.toMediaType(charset));
+    requestBody = RequestBody.create(ContentType.JSON.toMediaType(charset),jsonBody);
     return this;
   }
 
@@ -119,12 +119,12 @@ public class Request {
   }
 
   public Request body(byte[] bytes, MediaType mediaType) {
-    requestBody = RequestBody.create(bytes, mediaType);
+    requestBody = RequestBody.create(mediaType,bytes);
     return this;
   }
 
   public Request body(String content, MediaType mediaType) {
-    requestBody = RequestBody.create(content, mediaType);
+    requestBody = RequestBody.create(mediaType,content);
     return this;
   }
 
@@ -139,7 +139,7 @@ public class Request {
             .addFormDataPart(
                 "file",
                 file.getName(),
-                RequestBody.create(file, MediaType.parse(ContentType.MULTIPART.getValue())));
+                RequestBody.create(MediaType.parse(ContentType.MULTIPART.getValue()),file));
     if (progressListener != null) {
       builder.addProgressListener(progressListener);
     }

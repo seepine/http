@@ -1,13 +1,12 @@
 package com.seepine.http;
 
 import com.seepine.http.exception.HttpException;
+import java.io.IOException;
+import java.io.InputStream;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import okhttp3.internal.http.StatusLine;
 
-import java.io.IOException;
-import java.io.InputStream;
 /**
  * @author seepine
  */
@@ -35,9 +34,6 @@ public class Response {
     return response;
   }
 
-  public StatusLine getStatusLine() {
-    return StatusLine.Companion.get(response);
-  }
   /**
    * auto handle name
    *

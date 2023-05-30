@@ -1,9 +1,8 @@
 package com.seepine.http;
 
-import okhttp3.MediaType;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import okhttp3.MediaType;
 
 /**
  * @author seepine
@@ -40,50 +39,6 @@ public enum ContentType {
   }
 
   /**
-   * 获取value值
-   *
-   * @return value值
-   * @since 5.2.6
-   */
-  public String getValue() {
-    return value;
-  }
-
-  @Override
-  public String toString() {
-    return getValue();
-  }
-
-  /**
-   * 输出Content-Type字符串，附带编码信息
-   *
-   * @param charset 编码
-   * @return Content-Type字符串
-   */
-  public String toString(Charset charset) {
-    return parse(this, charset);
-  }
-
-  /**
-   * 输出toMediaType
-   *
-   * @return MediaType
-   */
-  public MediaType toMediaType() {
-    return MediaType.Companion.parse(ContentType.parse(value, StandardCharsets.UTF_8));
-  }
-
-  /**
-   * 输出toMediaType
-   *
-   * @param charset charset
-   * @return MediaType
-   */
-  public MediaType toMediaType(Charset charset) {
-    return MediaType.Companion.parse(ContentType.parse(value, charset));
-  }
-
-  /**
    * 输出Content-Type字符串，附带编码信息
    *
    * @param contentType Content-Type类型
@@ -116,6 +71,50 @@ public enum ContentType {
       }
     }
     return null;
+  }
+
+  /**
+   * 获取value值
+   *
+   * @return value值
+   * @since 5.2.6
+   */
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return getValue();
+  }
+
+  /**
+   * 输出Content-Type字符串，附带编码信息
+   *
+   * @param charset 编码
+   * @return Content-Type字符串
+   */
+  public String toString(Charset charset) {
+    return parse(this, charset);
+  }
+
+  /**
+   * 输出toMediaType
+   *
+   * @return MediaType
+   */
+  public MediaType toMediaType() {
+    return MediaType.parse(ContentType.parse(value, StandardCharsets.UTF_8));
+  }
+
+  /**
+   * 输出toMediaType
+   *
+   * @param charset charset
+   * @return MediaType
+   */
+  public MediaType toMediaType(Charset charset) {
+    return MediaType.parse(ContentType.parse(value, charset));
   }
 
   public boolean equals(MediaType mediaType) {
